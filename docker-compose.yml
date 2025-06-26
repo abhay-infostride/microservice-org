@@ -1,0 +1,71 @@
+version: "3.0"
+
+
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: employee_db
+    networks:
+      springboot-network:
+
+
+  api-gateway:
+    container_name: api-gateway-service
+    build:
+      context: ./api-gateway/
+      dockerfile: Dockerfile
+    ports:
+      - "9191:9191"
+    networks:
+      springboot-network:
+    restart: on-failure
+
+  department-service:
+    container_name: department-service
+    build:
+      context: ./department-service/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      springboot-network:
+    restart: on-failure
+
+  employee-service:
+    container_name: employee-service
+    build:
+      context: ./employee-service/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      springboot-network:
+    restart: on-failure
+
+  organization-service:
+    container_name: organization-service
+    build:
+      context: ./organization-service/
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      springboot-network:
+    restart: on-failure
+
+  service-registry:
+    container_name: service-registry-service
+    build:
+      context: ./service-registry/
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      springboot-network:
+    restart: on-failure
+
+networks:
+  springboot-network:
